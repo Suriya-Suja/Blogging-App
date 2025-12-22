@@ -11,9 +11,11 @@ import java.util.Date;
 @Entity(name = "articles")
 @Getter
 @Setter
+@Builder
 @ToString
 @RequiredArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class ArticleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
