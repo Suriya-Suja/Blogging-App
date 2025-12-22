@@ -65,7 +65,9 @@ public class ArticlesService {
         }
 
         public ArticleNotFoundException(Long id) {
-            super("Article with ID" + id + " not found");
+            super("Article with ID " + id + " not found");
         }
+
+
     }
 }
