@@ -22,6 +22,10 @@ public class UserEntity {
     @NonNull
     private String username;
 
+    @Column(name = "password", nullable = false)
+    @NonNull
+    private String password;
+
     @Column(name = "email", nullable = false)
     @NonNull
     private String email;
