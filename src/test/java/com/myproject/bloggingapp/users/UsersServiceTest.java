@@ -17,7 +17,6 @@ public class UsersServiceTest {
     @Autowired
     UsersService usersService;
 
-
     @Test
     void can_create_users(){
 

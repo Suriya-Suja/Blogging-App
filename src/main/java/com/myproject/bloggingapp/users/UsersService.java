@@ -9,12 +9,18 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private UsersMapper usersMapper;
+
     public UserEntity createUser(CreateUserRequest request) {
-        var newUser = UserEntity.builder()
-                .username(request.getUsername())
-//                .password(password)   // TODO: encrypt password
-                .email(request.getEmail())
-                .build();
+//        var newUser = UserEntity.builder()
+//                .username(request.getUsername())
+////                .password(password)   // TODO: encrypt password
+//                .email(request.getEmail())
+//                .build();
+
+        // TODO: save and encrypt password as well
+        var newUser = usersMapper.toEntity(request);
 
         return usersRepository.save(newUser);
     }
@@ -28,9 +34,8 @@ public class UsersService {
     }
 
     public UserEntity loginUser(String username, String password) {
-        var user = usersRepository.findByUsername(username).orElseThrow(() -> new UsersService.UserNotFoundException(username));
         // TODO: check the password
-        return user;
+        return getUser(username);
     }
 
     public static class UserNotFoundException extends IllegalArgumentException {

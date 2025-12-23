@@ -7,8 +7,8 @@ import lombok.*;
 @Entity(name = "users")
 @Getter
 @Setter
-@Builder
 @ToString
+@Builder
 @RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
