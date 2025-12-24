@@ -1,16 +1,18 @@
 package com.myproject.bloggingapp.users;
 
+import com.myproject.bloggingapp.security.JwtService;
 import com.myproject.bloggingapp.users.dtos.CreateUserRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UsersService {
-    @Autowired
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
+    private final UsersMapper usersMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UsersMapper usersMapper;
 
     public UserEntity createUser(CreateUserRequest request) {
 //        var newUser = UserEntity.builder()
@@ -19,8 +21,8 @@ public class UsersService {
 //                .email(request.getEmail())
 //                .build();
 
-        // TODO: save and encrypt password as well
         var newUser = usersMapper.toEntity(request);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
         return usersRepository.save(newUser);
     }
@@ -34,7 +36,12 @@ public class UsersService {
     }
 
     public UserEntity loginUser(String username, String password) {
-        // TODO: check the password
+        var user = getUser(username);
+        var passMatch = passwordEncoder.matches(password, user.getPassword());
+        if(!passMatch) {
+            throw new InvalidCredentialsException();
+        }
+
         return getUser(username);
     }
 
@@ -45,6 +52,12 @@ public class UsersService {
 
         public UserNotFoundException(Long userId) {
             super("User with ID " + userId + " not found");
+        }
+    }
+
+    public static class InvalidCredentialsException extends IllegalArgumentException {
+        public InvalidCredentialsException() {
+            super("Invalid username or password");
         }
     }
 }
